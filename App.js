@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
+import { useState } from 'react';
 
 import Login from './components/Login';
 import CadastroDeClientes from './components/CadastroDeClientes';
@@ -9,15 +11,15 @@ import Carrinho from './components/Carrinho';
 import AreaAdmin from './components/AreaAdmin';
 
 export default function App() {
-  const [userName, setUserName] = useState('');
-  const [userPassword, setUserPassword] = useState('');
+  const [logged, setLogged] = useState(false);
+  const [registered, setRegistered] = useState(false);
 
-  const [registeredName, setRegisteredName] = useState('');
-  const [registeredPassword, setRegisteredPassword] = useState('');
+  const [users, setUsers] = useState([]);
+
 
   return (
     <View style={styles.container}>
-
+      {!registered ? (<Login obj={{register: registered}} setRegistered={setRegistered} usersStorage={AsyncStorage} />) : (<CadastroDeClientes setRegistered={setRegistered} obj={{register: registered}} AsyncStorage={AsyncStorage}/>)}
     </View>
   );
 }
