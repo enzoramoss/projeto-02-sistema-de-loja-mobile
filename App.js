@@ -13,13 +13,29 @@ import AreaAdmin from './components/AreaAdmin';
 export default function App() {
   const [logged, setLogged] = useState(false);
   const [registered, setRegistered] = useState(false);
-
-  const [users, setUsers] = useState([]);
-
+  const [adminLog, setAdminLog] = useState(false)
 
   return (
     <View style={styles.container}>
-      {!registered ? (<Login obj={{register: registered}} setRegistered={setRegistered} usersStorage={AsyncStorage} />) : (<CadastroDeClientes setRegistered={setRegistered} obj={{register: registered}} AsyncStorage={AsyncStorage}/>)}
+      {!registered ?
+        (<Login obj={{ register: registered }}
+          objLogged={{ logged: logged }}
+          setLogged={setLogged}
+          setRegistered={setRegistered}
+          usersStorage={AsyncStorage}
+          adminLogged={{ adminLog: adminLog }}
+          setAdminLogged={setAdminLog} />)
+        :
+        (<CadastroDeClientes
+          setRegistered={setRegistered}
+          obj={{ register: registered }}
+          AsyncStorage={AsyncStorage} />
+        )
+      }
+
+      {logged && <ListaProdutos />}
+      
+      {adminLog && <AreaAdmin />}
     </View>
   );
 }

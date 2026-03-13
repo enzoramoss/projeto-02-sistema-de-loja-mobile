@@ -1,6 +1,8 @@
+import { View, Text } from 'react-native'
+
 export default function Carrinho({ client }) {
   return (
-    <View style={styles.container}>
+    <View>
       <Text>Carrinho</Text>
     </View>
   );
