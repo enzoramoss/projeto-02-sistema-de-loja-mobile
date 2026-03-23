@@ -1,42 +1,40 @@
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native'
+import { Text, View, TextInput, TouchableOpacity } from 'react-native'
 import { useEffect, useState } from 'react'
 
-export default function CadastroDeClientes({ AsyncStorage, setRegistered, obj }) {
-    const [user, setUser] = useState({
-        id: Date.now().toString(),
-        name: '',
-        password: ''
-    })
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-    const [canMove, setCanMove] = useState(false)
+import styles from '../styles';
 
-    useEffect(() => {
-        async function saveUser() {
-            try {
-                const jsonValue = JSON.stringify(user)
-                await AsyncStorage.setItem('user', jsonValue)
-            } catch (e) {
-                console.log(e)
-            }
+export default function CadastroDeClientes({ navigation }) {
+
+    const [name, setName] = useState('')
+    const [password, setPassword] = useState('')
+
+    function register() {
+        if (name.trim() !== '' && password.trim() !== '') {
+            setName('')
+            setPassword('')
+            navigation.navigate('Login', { name, password })
         }
+    }
 
-        if (user.name !== '' && user.password !== '') {
-            saveUser()
-            setCanMove(true)
-        }
-    }, [user])
+    function navLogin() {
+        navigation.navigate('Login')
+    }
 
     return (
-        <View>
-            <Text>Cadastro de Clientes</Text>
+        <View style={styles.container}>
+            <Text style={styles.text}>Cadastro</Text>
 
 
-            <TextInput placeholder='Nome' onChangeText={text => setUser({ ...user, name: text })} />
-            <TextInput placeholder='Senha' onChangeText={(text) => setUser({ ...user, password: text })} />
+            <TextInput placeholder='Nome do usuário' style={styles.input} />
+            <TextInput placeholder='Senha do usuário' style={styles.input} />
 
-            <Button onPress={() => (canMove && setRegistered(false))} title='Registrar-se'/>
+            <TouchableOpacity style={{ marginTop: '5px', backgroundColor: '#007bff', padding: '10px', borderRadius: '3px' }} onPress={register}>
+                <Text style={{ color: 'white', fontWeight: 'bold' }}>Registrar</Text>
+            </TouchableOpacity>
 
-            <Button onPress={obj.register && (() => setRegistered(false))} title='Login'/>
+            <Text style={styles.text}>Ainda não possui uma conta? {<TouchableOpacity style={{color: 'blue', textDecorationLine: 'underline'}} onPress={navLogin}>Clique aqui!</TouchableOpacity>}</Text>
         </View>
     );
 }

@@ -1,58 +1,60 @@
-import { Text, View, Button } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
-import { TextInput } from 'react-native-web';
 
-export default function Login({ usersStorage, setRegistered, obj, objLogged, setLogged, adminLogged, setAdminLogged }) {
-  const [profile, setProfile] = useState(null)
-  
+import styles from '../styles';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export default function Login({ navigation }) {
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
+
+  const [users, setUsers] = useState([])
 
   const [permanentName, setPermanentName] = useState('admin')
   const [permanentPassword, setPermanentPassword] = useState('root')
 
-  useEffect(() => {
-    async function loadUser() {
-      try {
-        const user = await usersStorage.getItem('user')
-
-        if (user !== null) {
-          setProfile(JSON.parse(user))
-        }
-      } catch (e) {
-        console.log(e)
-      }
+  function login() {
+    if (name.trim() !== '' && password.trim() !== '') {
+      setName('')
+      setPassword('')
+      navigation.navigate('Cart', { name, password })
     }
-    
-    loadUser()
-  }, [])
 
-  function clientLogin() {
-    if (profile !== null) {
-      if (profile.name === name && profile.password === password) {
-        setLogged(true)
-      }
+    if (name.trim() === permanentName && password.trim() === permanentPassword) {
+      setName('')
+      setPassword('')
+      navigation.navigate('AdminArea')
     }
   }
 
-  function adminLogin() {
-    if (profile.name === permanentName && profile.password === permanentPassword) {
-      setAdminLogged(true)
-    }
+  function navRegister() {
+    navigation.navigate('Register')
   }
 
   return (
-    <View>
-      <Text>Login</Text>
+    <View style={styles.container}>
+      <Text style={styles.text}>Login</Text>
 
-      <TextInput placeholder='Nome' onChangeText={setName} />
-      <TextInput placeholder='Senha' onChangeText={setPassword} />
+      <TextInput
+        placeholder='Nome do usuário'
+        value={name}
+        onChangeText={setName}
+        style={styles.input}
+      />
 
-      {profile && (profile.name === name && profile.password === password) && <Text>Logado</Text>}
+      <TextInput
+        placeholder='Senha do usuário'
+        value={password}
+        onChangeText={setPassword}
+        style={styles.input}
+      />
 
-      <Button onPress={!objLogged.logged ? (clientLogin()) : !adminLogged.adminLog && (adminLogin())} title='Entrar'/>
+      <TouchableOpacity style={{ marginTop: '5px', backgroundColor: '#007bff', padding: '10px', borderRadius: '3px' }} onPress={login}>
+        <Text style={{ color: 'white', fontWeight: 'bold'}}>Login</Text>
+      </TouchableOpacity>
 
-      <Button onPress={!obj.register && (() => setRegistered(true))} title='Registrar-se' />
+      <Text style={styles.text}>Ainda não possui uma conta? {<TouchableOpacity style={{color: 'blue', textDecorationLine: 'underline'}} onPress={navRegister}>Registre-se!</TouchableOpacity>}</Text>
     </View>
   );
 }
