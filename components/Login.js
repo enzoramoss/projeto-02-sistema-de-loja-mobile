@@ -1,5 +1,5 @@
 // projeto-2/components/Login.js
-import { Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
 import styles from '../styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -71,7 +71,7 @@ export default function Login({ navigation }) {
       setPassword('');
       navigation.navigate('Cart', { name: trimmedName, password: trimmedPassword });
     } else {
-      Alert.alert('Erro', 'Usuário ou senha inválidos.');
+      alert('Erro, usuário ou senha inválidos.');
     }
   }
 
