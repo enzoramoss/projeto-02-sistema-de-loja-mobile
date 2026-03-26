@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import {
   View, Text, TouchableOpacity, ScrollView,
-  Alert, StatusBar, SafeAreaView
+  StatusBar, SafeAreaView
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PRODUCTS_KEY = '@products_list';
-const CART_KEY     = '@cart_list';
+const CART_KEY = '@cart_list';
 
 // ─── Utilitários ─────────────────────────────────────────────────────────────
 const formatPrice = (value) =>
@@ -21,12 +21,12 @@ export default function AreaDoCliente({ navigation, route }) {
 
   // dados persistidos
   const [products, setProducts] = useState(null);
-  const [cart, setCart]         = useState(null);
+  const [cart, setCart] = useState(null);
   const [pendingCartSave, setPendingCartSave] = useState(false);
 
   // controle de UI
-  const [tab, setTab]           = useState('store'); // 'store' | 'cart'
-  const [qtys, setQtys]         = useState({});       // { [productId]: number }
+  const [tab, setTab] = useState('store'); // 'store' | 'cart'
+  const [qtys, setQtys] = useState({});       // { [productId]: number }
 
   // ── 1. Carrega produtos e carrinho ao montar ────────────────────────────────
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function AreaDoCliente({ navigation, route }) {
           AsyncStorage.getItem(CART_KEY),
         ]);
         const productList = storedProducts ? JSON.parse(storedProducts) : [];
-        const cartList    = storedCart     ? JSON.parse(storedCart)     : [];
+        const cartList = storedCart ? JSON.parse(storedCart) : [];
 
         setProducts(productList);
         setCart(cartList);
@@ -89,7 +89,7 @@ export default function AreaDoCliente({ navigation, route }) {
       return [...prev, { ...product, qty }];
     });
     setPendingCartSave(true);
-    Alert.alert('✓ Adicionado', `${qty}× "${product.name}" no carrinho.`);
+    alert('✓ Adicionado', `${qty}× "${product.name}" no carrinho.`);
   }
 
   function changeCartQty(productId, delta) {
@@ -109,7 +109,7 @@ export default function AreaDoCliente({ navigation, route }) {
   function handleCheckout() {
     if (!cart || cart.length === 0) return;
     const total = formatPrice(cartTotal(cart));
-    Alert.alert(
+    alert(
       '🛒 Confirmar compra',
       `Total: ${total}\n\nDeseja finalizar o pedido?`,
       [
@@ -119,7 +119,7 @@ export default function AreaDoCliente({ navigation, route }) {
           onPress: () => {
             setCart([]);
             setPendingCartSave(true);
-            Alert.alert(
+            alert(
               '🎉 Pedido realizado!',
               `Obrigado, ${clientName}! Seu pedido foi registrado com sucesso.`,
               [{ text: 'OK', onPress: () => setTab('store') }]
@@ -308,11 +308,11 @@ function CartView({ cart, changeCartQty, removeFromCart, handleCheckout }) {
 }
 
 // ─── Estilos ──────────────────────────────────────────────────────────────────
-const AMBER  = '#e07b2a';
-const CREAM  = '#fdf6ec';
-const DARK   = '#1f1a14';
-const MUTED  = '#9a8c7f';
-const WHITE  = '#ffffff';
+const AMBER = '#e07b2a';
+const CREAM = '#fdf6ec';
+const DARK = '#1f1a14';
+const MUTED = '#9a8c7f';
+const WHITE = '#ffffff';
 
 const ui = {
   screen: { flex: 1, backgroundColor: CREAM },
@@ -330,7 +330,7 @@ const ui = {
     borderBottomColor: '#e8dfd3',
   },
   headerGreeting: { fontSize: 20, fontWeight: '800', color: DARK },
-  headerSub:      { fontSize: 13, color: MUTED, marginTop: 2 },
+  headerSub: { fontSize: 13, color: MUTED, marginTop: 2 },
   logoutBtn: {
     backgroundColor: DARK,
     paddingHorizontal: 14,
@@ -353,16 +353,16 @@ const ui = {
     borderBottomWidth: 3,
     borderBottomColor: 'transparent',
   },
-  tabActive:     { borderBottomColor: AMBER },
-  tabText:       { fontSize: 14, fontWeight: '600', color: MUTED },
+  tabActive: { borderBottomColor: AMBER },
+  tabText: { fontSize: 14, fontWeight: '600', color: MUTED },
   tabTextActive: { color: AMBER },
 
   // States
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32 },
   loadingText: { color: MUTED, fontSize: 15 },
-  emptyIcon:  { fontSize: 48, marginBottom: 12 },
+  emptyIcon: { fontSize: 48, marginBottom: 12 },
   emptyTitle: { fontSize: 17, fontWeight: '700', color: DARK, textAlign: 'center' },
-  emptySub:   { fontSize: 14, color: MUTED, textAlign: 'center', marginTop: 6 },
+  emptySub: { fontSize: 14, color: MUTED, textAlign: 'center', marginTop: 6 },
 
   // List
   listContent: { padding: 16, paddingBottom: 32 },
@@ -398,15 +398,15 @@ const ui = {
     alignItems: 'center',
     justifyContent: 'center',
   },
-  productIcon:    { fontSize: 22 },
+  productIcon: { fontSize: 22 },
   productDetails: { flex: 1 },
-  productName:    { fontSize: 15, fontWeight: '700', color: DARK },
-  productDesc:    { fontSize: 12, color: MUTED, marginTop: 2 },
-  productPrice:   { fontSize: 15, fontWeight: '800', color: AMBER, marginTop: 4 },
+  productName: { fontSize: 15, fontWeight: '700', color: DARK },
+  productDesc: { fontSize: 12, color: MUTED, marginTop: 2 },
+  productPrice: { fontSize: 15, fontWeight: '800', color: AMBER, marginTop: 4 },
 
   // Qty controls
-  qtyBlock:  { alignItems: 'center', gap: 6 },
-  qtyRow:    { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  qtyBlock: { alignItems: 'center', gap: 6 },
+  qtyRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   qtyBtn: {
     width: 28, height: 28,
     borderRadius: 8,
@@ -415,7 +415,7 @@ const ui = {
     justifyContent: 'center',
   },
   qtyBtnText: { fontSize: 16, fontWeight: '700', color: DARK, lineHeight: 20 },
-  qtyValue:   { fontSize: 15, fontWeight: '700', color: DARK, minWidth: 22, textAlign: 'center' },
+  qtyValue: { fontSize: 15, fontWeight: '700', color: DARK, minWidth: 22, textAlign: 'center' },
   addBtn: {
     backgroundColor: AMBER,
     borderRadius: 8,
@@ -438,11 +438,11 @@ const ui = {
     shadowRadius: 4,
     elevation: 1,
   },
-  cartInfo:     { flex: 1 },
+  cartInfo: { flex: 1 },
   cartItemName: { fontSize: 15, fontWeight: '700', color: DARK },
   cartItemUnit: { fontSize: 12, color: MUTED, marginTop: 2 },
-  cartRight:    { alignItems: 'flex-end', gap: 4 },
-  cartItemTotal:{ fontSize: 14, fontWeight: '800', color: AMBER },
+  cartRight: { alignItems: 'flex-end', gap: 4 },
+  cartItemTotal: { fontSize: 14, fontWeight: '800', color: AMBER },
   removeBtn: {
     width: 32, height: 32,
     borderRadius: 8,

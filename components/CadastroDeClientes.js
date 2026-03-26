@@ -1,4 +1,4 @@
-import { Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../styles';
@@ -8,6 +8,7 @@ const USERS_STORAGE_KEY = '@users_list';
 export default function CadastroDeClientes({ navigation }) {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('')
   const [users, setUsers] = useState(null); // null = ainda não carregou
   const [pendingRegister, setPendingRegister] = useState(false);
 
@@ -33,13 +34,14 @@ export default function CadastroDeClientes({ navigation }) {
       try {
         await AsyncStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
         setPendingRegister(false);
-        Alert.alert('Sucesso!', 'Usuário cadastrado com sucesso.');
+        alert('Sucesso!', 'Usuário cadastrado com sucesso.');
         navigation.navigate('Login');
       } catch (error) {
         console.error('Erro ao salvar usuário:', error);
-        Alert.alert('Erro', 'Não foi possível salvar o cadastro.');
+        alert('Erro', 'Não foi possível salvar o cadastro.');
       }
     }
+
     saveAndNavigate();
   }, [users, pendingRegister]);
 
@@ -48,19 +50,24 @@ export default function CadastroDeClientes({ navigation }) {
     const trimmedPassword = password.trim();
 
     if (trimmedName === '' || trimmedPassword === '') {
-      Alert.alert('Atenção', 'Preencha todos os campos.');
+      alert('Atenção', 'Preencha todos os campos.');
       return;
     }
 
     if (users === null) {
-      Alert.alert('Aguarde', 'Carregando dados, tente novamente.');
+      alert('Aguarde', 'Carregando dados, tente novamente.');
+      return;
+    }
+
+    if (trimmedPassword !== passwordConfirm) {
+      alert('Atenção, confirme a sua senha!');
       return;
     }
 
     // Verifica se o usuário já existe
     const alreadyExists = users.some((u) => u.name === trimmedName);
     if (alreadyExists) {
-      Alert.alert('Atenção', 'Esse nome de usuário já está em uso.');
+      alert('Atenção', 'Esse nome de usuário já está em uso.');
       return;
     }
 
@@ -89,11 +96,17 @@ export default function CadastroDeClientes({ navigation }) {
         onChangeText={setPassword}
         style={styles.input}
       />
+      <TextInput
+        placeholder='Confirme a senha'
+        value={passwordConfirm}
+        onChangeText={setPasswordConfirm}
+        style={styles.input}
+      />
 
       <TouchableOpacity
         style={{ marginTop: 5, backgroundColor: '#007bff', padding: 10, borderRadius: 3 }}
-        onPress={register}
-      >
+        onPress={register}>
+
         <Text style={{ color: 'white', fontWeight: 'bold' }}>Registrar</Text>
       </TouchableOpacity>
 

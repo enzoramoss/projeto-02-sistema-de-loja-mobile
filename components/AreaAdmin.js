@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
-  FlatList, Alert, ScrollView, StatusBar
+  FlatList, ScrollView, StatusBar
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -38,7 +38,7 @@ export default function AreaAdmin({ navigation }) {
         setPendingSave(false);
       } catch (e) {
         console.error('Erro ao salvar produto:', e);
-        Alert.alert('Erro', 'Não foi possível salvar o produto.');
+        alert('Erro', 'Não foi possível salvar o produto.');
       }
     }
     saveProducts();
@@ -55,18 +55,18 @@ export default function AreaAdmin({ navigation }) {
     const price = form.price.trim();
 
     if (!name || !description || !price) {
-      Alert.alert('Atenção', 'Preencha todos os campos antes de cadastrar.');
+      alert('Atenção', 'Preencha todos os campos antes de cadastrar.');
       return;
     }
 
     const parsedPrice = parseFloat(price.replace(',', '.'));
     if (isNaN(parsedPrice) || parsedPrice <= 0) {
-      Alert.alert('Atenção', 'Informe um preço válido (ex: 29.90).');
+      alert('Atenção', 'Informe um preço válido (ex: 29.90).');
       return;
     }
 
     if (products === null) {
-      Alert.alert('Aguarde', 'Os dados ainda estão sendo carregados.');
+      alert('Aguarde', 'Os dados ainda estão sendo carregados.');
       return;
     }
 
@@ -74,7 +74,7 @@ export default function AreaAdmin({ navigation }) {
       (p) => p.name.toLowerCase() === name.toLowerCase()
     );
     if (alreadyExists) {
-      Alert.alert('Atenção', 'Já existe um produto com esse nome.');
+      alert('Atenção', 'Já existe um produto com esse nome.');
       return;
     }
 
@@ -88,7 +88,7 @@ export default function AreaAdmin({ navigation }) {
     setProducts((prev) => [...prev, newProduct]);
     setPendingSave(true);
     setForm(EMPTY_FORM);
-    Alert.alert('Sucesso!', `"${name}" cadastrado com sucesso.`);
+    alert('Sucesso!', `"${name}" cadastrado com sucesso.`);
   }
 
 function handleDelete(id) {
