@@ -67,7 +67,7 @@ export default function CadastroDeClientes({ navigation }) {
     // Verifica se o usuário já existe
     const alreadyExists = users.some((u) => u.name === trimmedName);
     if (alreadyExists) {
-      alert('Atenção', 'Esse nome de usuário já está em uso.');
+      alert('Atenção, esse nome de usuário já está em uso.');
       return;
     }
 
